@@ -31,7 +31,7 @@
         .section { display: none; opacity: 0; transform: translateY(15px); transition: all 0.4s ease; }
         .section.active { display: block; opacity: 1; transform: translateY(0); }
 
-        /* ========== UNIQUE 3D ANIMATIONS ========== */
+        /* 3D Logo */
         .logo-3d {
             transform-style: preserve-3d;
             transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), filter 0.5s ease;
@@ -94,11 +94,9 @@
             50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
         }
 
-        .chart-glow {
-            transition: box-shadow 0.4s ease;
-        }
-        .chart-glow.updating {
-            box-shadow: 0 0 40px rgba(99, 102, 241, 0.25);
+        /* Chart canvas glow */
+        #main-chart {
+            filter: drop-shadow(0 0 12px rgba(236, 72, 153, 0.35));
         }
     </style>
 </head>
@@ -109,7 +107,6 @@
         <div class="max-w-screen-2xl mx-auto px-8">
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center gap-x-3">
-                    <!-- Unique 3D Logo -->
                     <div class="logo-3d w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 flex items-center justify-center cursor-pointer">
                         <span class="text-white text-2xl font-bold tracking-tighter">V</span>
                     </div>
@@ -125,11 +122,11 @@
                 </div>
 
                 <div class="flex items-center gap-x-4">
-                    <div class="hidden md:flex items-center bg-white/5 border border-white/10 rounded-3xl px-4 py-2 w-72 transition-all focus-within:border-indigo-500/50">
+                    <div class="hidden md:flex items-center bg-white/5 border border-white/10 rounded-3xl px-4 py-2 w-72">
                         <i class="fa-solid fa-search text-slate-400 mr-3"></i>
-                        <input id="global-search" type="text" placeholder="Search stories or markets..." class="bg-transparent w-full outline-none text-sm placeholder:text-slate-500">
+                        <input id="global-search" type="text" placeholder="Search..." class="bg-transparent w-full outline-none text-sm placeholder:text-slate-500">
                     </div>
-                    <div class="w-9 h-9 rounded-2xl overflow-hidden ring-2 ring-white/10 cursor-pointer hover:ring-indigo-500/50 transition-all" onclick="switchTab('explore')">
+                    <div class="w-9 h-9 rounded-2xl overflow-hidden ring-2 ring-white/10 cursor-pointer" onclick="switchTab('explore')">
                         <img src="https://i.pravatar.cc/36?u=rose" class="w-full h-full object-cover">
                     </div>
                 </div>
@@ -148,10 +145,8 @@
                 <h1 class="heading-serif text-7xl leading-none tracking-[-3.5px]">Stories that<br>stay with you.</h1>
                 <p class="mt-6 text-xl text-slate-400 max-w-md">Thoughtfully curated narratives from culture, technology, and the human experience.</p>
                 <div class="flex gap-x-4 mt-9">
-                    <button onclick="switchTab('stories')" class="btn-press px-8 py-4 bg-white text-[#0a0f1e] font-semibold rounded-3xl flex items-center gap-x-3 hover:bg-amber-50 transition-all text-sm tracking-wider">
-                        BROWSE STORIES
-                    </button>
-                    <button onclick="switchTab('markets')" class="btn-press px-7 py-4 border border-white/20 hover:bg-white/5 rounded-3xl text-sm font-medium flex items-center gap-x-2 transition-all">
+                    <button onclick="switchTab('stories')" class="btn-press px-8 py-4 bg-white text-[#0a0f1e] font-semibold rounded-3xl">BROWSE STORIES</button>
+                    <button onclick="switchTab('markets')" class="btn-press px-7 py-4 border border-white/20 hover:bg-white/5 rounded-3xl text-sm font-medium">
                         <i class="fa-solid fa-chart-line mr-2"></i> View Markets
                     </button>
                 </div>
@@ -165,12 +160,11 @@
             <div class="flex items-end justify-between mb-8">
                 <div>
                     <h2 class="text-4xl font-semibold tracking-tight">Stories</h2>
-                    <p class="text-slate-400 mt-1">22 thoughtfully written narratives</p>
+                    <p class="text-slate-400 mt-1">Thoughtfully written narratives</p>
                 </div>
-                <button onclick="clearAllFilters()" class="btn-press px-5 py-2 text-sm border border-white/10 rounded-3xl hover:bg-white/5 transition-all">Clear Filters</button>
             </div>
             <div id="category-filters" class="flex flex-wrap gap-2 mb-8"></div>
-            <div id="blog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6"></div>
+            <div id="blog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
         </div>
     </div>
 
@@ -180,7 +174,7 @@
             <div class="flex items-end justify-between mb-8">
                 <div>
                     <h2 class="text-4xl font-semibold tracking-tight">Markets</h2>
-                    <p class="text-slate-400">Live cryptocurrency prices • Pro animated chart</p>
+                    <p class="text-slate-400">Live cryptocurrency prices • Constantly moving chart</p>
                 </div>
                 <div class="text-xs px-4 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-3xl flex items-center gap-x-2">
                     <div class="w-2 h-2 bg-emerald-400 rounded-full live-dot"></div> LIVE
@@ -195,11 +189,11 @@
                 <div class="glass rounded-3xl p-5"><div class="text-sm text-slate-400">Fear & Greed</div><div class="text-3xl font-semibold mt-1">72</div><div class="text-emerald-400 text-sm mt-1">Greed</div></div>
             </div>
 
-            <!-- Coin Cards (3D Tilt) -->
+            <!-- Coin Cards -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10" id="coin-cards"></div>
 
-            <!-- Pro Chart -->
-            <div class="glass rounded-3xl p-8 chart-glow" id="chart-container">
+            <!-- ADVANCED LIVE CHART -->
+            <div class="glass rounded-3xl p-8">
                 <div class="flex items-center justify-between mb-6">
                     <div>
                         <h3 class="font-semibold text-xl" id="chart-coin-name">Bitcoin (BTC)</h3>
@@ -209,12 +203,14 @@
                         </div>
                     </div>
                     <div class="flex gap-x-2">
-                        <button onclick="changeChartPeriod(1)" class="btn-press px-4 py-1.5 text-xs rounded-2xl bg-white/5 hover:bg-white/10 transition-all">1H</button>
-                        <button onclick="changeChartPeriod(24)" class="btn-press px-4 py-1.5 text-xs rounded-2xl bg-white/5 hover:bg-white/10 transition-all">24H</button>
-                        <button onclick="changeChartPeriod(168)" class="btn-press px-4 py-1.5 text-xs rounded-2xl bg-white/5 hover:bg-white/10 transition-all">7D</button>
+                        <button onclick="changeChartPeriod(1)" class="btn-press px-4 py-1.5 text-xs rounded-2xl bg-white/5 hover:bg-white/10">1H</button>
+                        <button onclick="changeChartPeriod(24)" class="btn-press px-4 py-1.5 text-xs rounded-2xl bg-white/5 hover:bg-white/10">24H</button>
+                        <button onclick="changeChartPeriod(168)" class="btn-press px-4 py-1.5 text-xs rounded-2xl bg-white/5 hover:bg-white/10">7D</button>
                     </div>
                 </div>
-                <div class="h-[420px]"><canvas id="main-chart"></canvas></div>
+                <div class="h-[420px] relative">
+                    <canvas id="main-chart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -225,14 +221,13 @@
             <div class="flex items-end justify-between mb-8">
                 <div>
                     <h2 class="text-4xl font-semibold tracking-tight">Your Bookmarks</h2>
-                    <p class="text-slate-400 mt-1">Stories you've saved for later</p>
+                    <p class="text-slate-400 mt-1">Stories you've saved</p>
                 </div>
             </div>
-            <div id="bookmarks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6"></div>
+            <div id="bookmarks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
             <div id="bookmarks-empty" class="hidden text-center py-16">
                 <i class="fa-regular fa-bookmark text-6xl text-slate-600 mb-4"></i>
                 <p class="text-xl text-slate-400">No bookmarks yet</p>
-                <p class="text-sm text-slate-500 mt-2">Save stories from the Stories tab to see them here</p>
             </div>
         </div>
     </div>
@@ -243,61 +238,40 @@
             <h2 class="text-4xl font-semibold tracking-tight mb-8">Explore</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="glass rounded-3xl p-8">
-                    <h3 class="font-semibold text-xl mb-4">Trending This Week</h3>
-                    <div class="space-y-4" id="trending-list"></div>
+                    <h3 class="font-semibold text-xl mb-4">Trending</h3>
+                    <div id="trending-list" class="space-y-4"></div>
                 </div>
                 <div class="glass rounded-3xl p-8">
-                    <h3 class="font-semibold text-xl mb-4">Popular Categories</h3>
-                    <div class="flex flex-wrap gap-3" id="popular-categories"></div>
+                    <h3 class="font-semibold text-xl mb-4">Categories</h3>
+                    <div id="popular-categories" class="flex flex-wrap gap-3"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Reading Modal (3D Entrance) -->
+    <!-- Modal -->
     <div id="reading-modal" onclick="if (event.target.id === 'reading-modal') closeModal()" 
          class="hidden fixed inset-0 bg-black/90 backdrop-blur-2xl z-[100] items-center justify-center p-4">
-        <div onclick="event.stopImmediatePropagation()" 
-             class="modal-3d bg-[#0a0f1e] w-full max-w-3xl rounded-3xl overflow-hidden border border-white/10 max-h-[94vh] flex flex-col">
-            
-            <div class="relative h-72 md:h-[340px]">
+        <div onclick="event.stopImmediatePropagation()" class="modal-3d bg-[#0a0f1e] w-full max-w-3xl rounded-3xl overflow-hidden border border-white/10 max-h-[94vh] flex flex-col">
+            <div class="relative h-72">
                 <img id="modal-image" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-[#0a0f1e]"></div>
-                <button onclick="closeModal()" class="absolute top-6 right-6 w-11 h-11 flex items-center justify-center bg-black/60 hover:bg-black/80 rounded-2xl transition-all">
+                <button onclick="closeModal()" class="absolute top-6 right-6 w-11 h-11 flex items-center justify-center bg-black/60 rounded-2xl">
                     <i class="fa-solid fa-times text-xl"></i>
                 </button>
-                <div id="modal-category" class="absolute top-6 left-6 px-5 py-1.5 text-xs font-semibold tracking-wider rounded-2xl"></div>
             </div>
-            
-            <div class="p-8 md:p-10 flex-1 overflow-auto">
-                <div class="flex items-center gap-x-3 mb-4">
-                    <div id="modal-author-info"></div>
-                    <div id="modal-meta" class="text-sm text-slate-400"></div>
-                </div>
-                <h1 id="modal-title" class="heading-serif text-4xl tracking-[-1.5px] mb-6"></h1>
-                <div id="modal-content" class="prose prose-invert max-w-none text-[15.5px] leading-relaxed"></div>
-                
-                <div class="mt-8 pt-6 border-t border-white/10 flex gap-3">
-                    <button onclick="likeCurrentStory()" class="btn-press flex items-center gap-x-2 px-6 py-3 bg-white/5 hover:bg-white/10 rounded-3xl text-sm transition-all">
-                        <i id="like-icon" class="fa-regular fa-heart mr-2"></i>
-                        <span id="like-count">124</span>
-                    </button>
-                    <button onclick="bookmarkCurrentStory()" class="btn-press flex items-center gap-x-2 px-5 py-3 border border-white/10 hover:bg-white/5 rounded-3xl text-sm transition-all">
-                        <i id="bookmark-icon" class="fa-regular fa-bookmark"></i>
-                    </button>
-                </div>
+            <div class="p-8 flex-1 overflow-auto">
+                <h1 id="modal-title" class="heading-serif text-4xl mb-6"></h1>
+                <div id="modal-content" class="prose prose-invert"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // Tab Switching
+        // ========== TAB SWITCHING ==========
         function switchTab(tab) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            setTimeout(() => {
-                document.getElementById(tab).classList.add('active');
-            }, 40);
-
+            setTimeout(() => document.getElementById(tab).classList.add('active'), 40);
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             const active = document.getElementById('tab-' + tab);
             if (active) active.classList.add('active');
@@ -306,46 +280,29 @@
             if (tab === 'bookmarks') renderBookmarks();
         }
 
-        // Stories Data
+        // ========== STORIES DATA ==========
         const posts = [
             { id: 1, title: "The Quiet Revolution: How AI is Reshaping Creativity", category: "Tech", excerpt: "Artificial intelligence isn't replacing artists — it's becoming their most interesting collaborator yet.", content: `<p>Artificial intelligence isn't replacing artists — it's becoming their most interesting collaborator yet.</p>`, image: "https://picsum.photos/id/1015/1200/800", date: "Jan 12, 2026", readTime: "9 min", author: "Zain Malik", avatar: "https://i.pravatar.cc/40?u=zain" },
             { id: 2, title: "Hunza in Winter: A Love Letter to the Mountains", category: "Travel", excerpt: "The silence of snow-covered peaks teaches you things that summer never could.", content: `<p>There’s a particular kind of peace that only exists when the world turns white.</p>`, image: "https://picsum.photos/id/1005/1200/800", date: "Jan 8, 2026", readTime: "11 min", author: "Ayesha Rahman", avatar: "https://i.pravatar.cc/40?u=ayesha" },
             { id: 22, title: "Crafting Emotional Stories: Lessons from Urdu Dramas", category: "Culture", excerpt: "The best stories don’t shout. They whisper truths we already feel but can’t name.", content: `<p>Working on emotional drama series has taught me that audiences don’t want perfection. They want honesty.</p>`, image: "https://picsum.photos/id/29/1200/800", date: "Sep 15, 2025", readTime: "10 min", author: "Rose (Lumora)", avatar: "https://i.pravatar.cc/40?u=rose" }
         ];
 
-        let likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || {};
         let bookmarkedPosts = JSON.parse(localStorage.getItem('bookmarkedPosts')) || [];
-        let currentPostId = null;
 
         function renderBlogGrid(filtered = null) {
             const grid = document.getElementById('blog-grid');
             grid.innerHTML = '';
-            const list = filtered || posts;
-            
-            list.forEach((post, index) => {
+            (filtered || posts).forEach(post => {
                 const card = document.createElement('div');
-                card.className = `premium-card group bg-white/5 border border-white/10 rounded-3xl overflow-hidden cursor-pointer`;
-                card.style.animationDelay = `${index * 0.06}s`;
+                card.className = `premium-card bg-white/5 border border-white/10 rounded-3xl overflow-hidden cursor-pointer`;
                 card.innerHTML = `
                     <div class="relative overflow-hidden">
                         <img src="${post.image}" class="w-full aspect-video object-cover">
-                        <div class="absolute top-4 left-4">
-                            <span class="px-3.5 py-1 text-xs font-semibold tracking-wider bg-black/70 text-white rounded-2xl">${post.category}</span>
-                        </div>
+                        <div class="absolute top-4 left-4"><span class="px-3 py-1 text-xs font-semibold bg-black/70 text-white rounded-2xl">${post.category}</span></div>
                     </div>
                     <div class="p-5">
-                        <h3 class="font-semibold text-[15.2px] leading-tight tracking-tight line-clamp-2 group-hover:text-indigo-300 transition-colors">${post.title}</h3>
-                        <p class="text-sm text-slate-400 mt-3 line-clamp-2">${post.excerpt}</p>
-                        <div class="flex items-center justify-between mt-6 text-xs">
-                            <div class="flex items-center gap-x-2">
-                                <img src="${post.avatar}" class="w-6 h-6 rounded-full">
-                                <span>${post.author}</span>
-                            </div>
-                            <div class="text-right text-slate-500">
-                                ${post.date}<br>
-                                <span class="text-emerald-400">${post.readTime}</span>
-                            </div>
-                        </div>
+                        <h3 class="font-semibold text-[15px] leading-tight">${post.title}</h3>
+                        <p class="text-sm text-slate-400 mt-2 line-clamp-2">${post.excerpt}</p>
                     </div>
                 `;
                 card.onclick = () => openModal(post.id);
@@ -356,107 +313,54 @@
         function renderCategoryFilters() {
             const container = document.getElementById('category-filters');
             container.innerHTML = '';
-            const categories = [...new Set(posts.map(p => p.category))];
-            
-            const allBtn = document.createElement('button');
-            allBtn.className = `btn-press px-5 py-2 rounded-3xl border text-xs font-medium border-white/20 hover:bg-white/5 transition-all`;
-            allBtn.textContent = 'All';
-            allBtn.onclick = () => renderBlogGrid();
-            container.appendChild(allBtn);
-            
-            categories.forEach(cat => {
+            const cats = [...new Set(posts.map(p => p.category))];
+            const all = document.createElement('button');
+            all.className = 'px-5 py-2 rounded-3xl border text-xs border-white/20 hover:bg-white/5';
+            all.textContent = 'All';
+            all.onclick = () => renderBlogGrid();
+            container.appendChild(all);
+            cats.forEach(c => {
                 const btn = document.createElement('button');
-                btn.className = `btn-press px-5 py-2 rounded-3xl border text-xs font-medium border-white/20 hover:bg-white/5 transition-all`;
-                btn.textContent = cat;
-                btn.onclick = () => renderBlogGrid(posts.filter(p => p.category === cat));
+                btn.className = 'px-5 py-2 rounded-3xl border text-xs border-white/20 hover:bg-white/5';
+                btn.textContent = c;
+                btn.onclick = () => renderBlogGrid(posts.filter(p => p.category === c));
                 container.appendChild(btn);
             });
         }
 
         function openModal(id) {
-            currentPostId = id;
             const post = posts.find(p => p.id === id);
             if (!post) return;
-
-            const modal = document.getElementById('reading-modal');
             document.getElementById('modal-image').src = post.image;
             document.getElementById('modal-title').textContent = post.title;
             document.getElementById('modal-content').innerHTML = post.content;
-            document.getElementById('modal-author-info').innerHTML = `<img src="${post.avatar}" class="w-8 h-8 rounded-full"> <span class="ml-2">${post.author}</span>`;
-            document.getElementById('modal-meta').innerHTML = `${post.date} • ${post.readTime}`;
-            document.getElementById('modal-category').innerHTML = `<span class="px-4 py-1 bg-white/10 rounded-2xl">${post.category}</span>`;
-            
-            const likeCount = likedPosts[id] || 124;
-            document.getElementById('like-count').textContent = likeCount;
-            
-            const icon = document.getElementById('bookmark-icon');
-            if (bookmarkedPosts.includes(id)) {
-                icon.classList.remove('fa-regular');
-                icon.classList.add('fa-solid', 'text-amber-400');
-            } else {
-                icon.classList.add('fa-regular');
-                icon.classList.remove('fa-solid', 'text-amber-400');
-            }
-            
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            document.getElementById('reading-modal').classList.remove('hidden');
+            document.getElementById('reading-modal').classList.add('flex');
         }
 
         function closeModal() {
-            const modal = document.getElementById('reading-modal');
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
+            document.getElementById('reading-modal').classList.add('hidden');
+            document.getElementById('reading-modal').classList.remove('flex');
         }
 
-        function likeCurrentStory() {
-            if (!currentPostId) return;
-            likedPosts[currentPostId] = (likedPosts[currentPostId] || 124) + 1;
-            localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
-            document.getElementById('like-count').textContent = likedPosts[currentPostId];
-            document.getElementById('like-icon').classList.add('fa-solid', 'text-red-500');
-        }
-
-        function bookmarkCurrentStory() {
-            if (!currentPostId) return;
-            const icon = document.getElementById('bookmark-icon');
-            
-            if (bookmarkedPosts.includes(currentPostId)) {
-                bookmarkedPosts = bookmarkedPosts.filter(id => id !== currentPostId);
-                icon.classList.remove('fa-solid', 'text-amber-400');
-                icon.classList.add('fa-regular');
-            } else {
-                bookmarkedPosts.push(currentPostId);
-                icon.classList.remove('fa-regular');
-                icon.classList.add('fa-solid', 'text-amber-400');
-            }
-            localStorage.setItem('bookmarkedPosts', JSON.stringify(bookmarkedPosts));
-        }
-
-        // ==================== 3D TILT FOR COIN CARDS ====================
-        function add3DTilt(element) {
-            element.addEventListener('mousemove', (e) => {
-                const rect = element.getBoundingClientRect();
+        // ========== 3D TILT ==========
+        function add3DTilt(el) {
+            el.addEventListener('mousemove', e => {
+                const rect = el.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = ((y - centerY) / centerY) * -8;
-                const rotateY = ((x - centerX) / centerX) * 8;
-                
-                element.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+                const rotateX = ((y - rect.height/2) / (rect.height/2)) * -8;
+                const rotateY = ((x - rect.width/2) / (rect.width/2)) * 8;
+                el.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
             });
-
-            element.addEventListener('mouseleave', () => {
-                element.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
-                element.style.transform = 'perspective(900px) rotateX(0) rotateY(0) scale(1)';
-                setTimeout(() => {
-                    element.style.transition = 'transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease';
-                }, 500);
+            el.addEventListener('mouseleave', () => {
+                el.style.transition = 'transform 0.5s cubic-bezier(0.23,1,0.32,1)';
+                el.style.transform = 'perspective(900px) rotateX(0) rotateY(0) scale(1)';
+                setTimeout(() => el.style.transition = 'transform 0.15s ease-out', 500);
             });
         }
 
-        // ==================== MARKETS + PRO CHART ====================
+        // ========== MARKETS + CONSTANT LIVE CHART ==========
         let coinData = {
             BTC: { name: "Bitcoin", symbol: "BTC", price: 96842, change: 3.24 },
             ETH: { name: "Ethereum", symbol: "ETH", price: 3421, change: -1.87 },
@@ -471,22 +375,24 @@
 
         let chartInstance = null;
         let currentChartCoin = 'BTC';
+        let priceHistory = [];
+        let volumeHistory = [];
+        let labels = [];
 
         function initMarkets() {
             renderCoinCards();
             initMainChart('BTC');
-            setInterval(updateLivePrices, 3800);
+            // Constant movement every 1.2 seconds
+            setInterval(updateLivePrices, 1200);
         }
 
         function renderCoinCards() {
             const container = document.getElementById('coin-cards');
             container.innerHTML = '';
-            
-            Object.keys(coinData).forEach((key, index) => {
+            Object.keys(coinData).forEach(key => {
                 const coin = coinData[key];
                 const div = document.createElement('div');
                 div.className = `coin-card glass border border-white/10 rounded-3xl p-5 cursor-pointer`;
-                
                 div.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div>
@@ -501,10 +407,7 @@
                         </div>
                     </div>
                 `;
-                
-                // Add unique 3D tilt
                 add3DTilt(div);
-                
                 div.onclick = () => {
                     currentChartCoin = key;
                     initMainChart(key);
@@ -513,51 +416,31 @@
             });
         }
 
-        function updateLivePrices() {
-            Object.keys(coinData).forEach(key => {
-                const coin = coinData[key];
-                const changePercent = (Math.random() * 0.7 - 0.35);
-                coin.price = parseFloat((coin.price * (1 + changePercent / 100)).toFixed(2));
-                
-                if (Math.random() > 0.65) {
-                    coin.change = parseFloat((coin.change + (Math.random() * 0.5 - 0.25)).toFixed(2));
-                }
-            });
-            renderCoinCards();
-            if (chartInstance && currentChartCoin) {
-                // Pro animation: glow the chart while updating
-                const container = document.getElementById('chart-container');
-                container.classList.add('updating');
-                updateChartData(currentChartCoin);
-                setTimeout(() => container.classList.remove('updating'), 600);
-            }
-        }
-
         function initMainChart(coinKey) {
             const coin = coinData[coinKey];
             currentChartCoin = coinKey;
-            
+
             document.getElementById('chart-coin-name').textContent = `${coin.name} (${coin.symbol})`;
             document.getElementById('chart-price').textContent = `$${coin.price.toLocaleString()}`;
             document.getElementById('chart-change').textContent = `${coin.change >= 0 ? '+' : ''}${coin.change}%`;
             document.getElementById('chart-change').className = coin.change >= 0 ? 'text-emerald-400 font-medium' : 'text-red-400 font-medium';
-            
+
+            // Generate initial history (40 points for smoother continuous feel)
+            priceHistory = [];
+            volumeHistory = [];
+            labels = [];
+            let base = coin.price * 0.92;
+            for (let i = 0; i < 40; i++) {
+                base = base * (1 + (Math.random() * 0.014 - 0.006));
+                priceHistory.push(parseFloat(base.toFixed(2)));
+                volumeHistory.push(Math.floor(Math.random() * 900) + 200);
+                labels.push('');
+            }
+            priceHistory[priceHistory.length - 1] = coin.price;
+
             const ctx = document.getElementById('main-chart');
             if (chartInstance) chartInstance.destroy();
-            
-            const labels = [];
-            const priceData = [];
-            const volumeData = [];
-            let basePrice = coin.price * 0.92;
-            
-            for (let i = 0; i < 24; i++) {
-                labels.push(`${i}:00`);
-                basePrice = basePrice * (1 + (Math.random() * 0.013 - 0.0055));
-                priceData.push(parseFloat(basePrice.toFixed(2)));
-                volumeData.push(Math.floor(Math.random() * 900) + 180);
-            }
-            priceData[priceData.length - 1] = coin.price;
-            
+
             chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -565,33 +448,32 @@
                     datasets: [
                         {
                             label: 'Price',
-                            data: priceData,
-                            borderColor: '#818cf8',
+                            data: priceHistory,
+                            borderColor: '#f472b6',                 // hot pink
                             borderWidth: 3.5,
-                            fill: true,
-                            backgroundColor: (context) => {
-                                const chart = context.chart;
-                                const {ctx, chartArea} = chart;
+                            backgroundColor: (ctx) => {
+                                const chart = ctx.chart;
+                                const {ctx: c, chartArea} = chart;
                                 if (!chartArea) return null;
-                                const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-                                gradient.addColorStop(0, 'rgba(99, 102, 241, 0)');
-                                gradient.addColorStop(1, 'rgba(99, 102, 241, 0.25)');
+                                const gradient = c.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                                gradient.addColorStop(0, 'rgba(236, 72, 153, 0)');
+                                gradient.addColorStop(0.6, 'rgba(236, 72, 153, 0.15)');
+                                gradient.addColorStop(1, 'rgba(56, 189, 248, 0.25)');
                                 return gradient;
                             },
+                            fill: true,
                             tension: 0.45,
-                            yAxisID: 'y',
                             pointRadius: 0,
-                            pointHoverRadius: 7,
-                            pointHoverBackgroundColor: '#a5b4fc',
-                            pointHoverBorderColor: '#fff',
-                            pointHoverBorderWidth: 2
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: '#f9a8d4',
+                            yAxisID: 'y'
                         },
                         {
                             label: 'Volume',
-                            data: volumeData,
+                            data: volumeHistory,
                             type: 'bar',
-                            backgroundColor: 'rgba(148, 163, 184, 0.18)',
-                            borderRadius: 4,
+                            backgroundColor: 'rgba(56, 189, 248, 0.25)',
+                            borderRadius: 3,
                             yAxisID: 'y1'
                         }
                     ]
@@ -600,147 +482,120 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     animation: {
-                        duration: 1400,
-                        easing: 'easeInOutQuart'
+                        duration: 900,
+                        easing: 'easeOutQuart'
                     },
                     interaction: { mode: 'index', intersect: false },
-                    plugins: { 
-                        legend: { 
-                            display: true, 
-                            position: 'top',
-                            labels: { color: '#94a3b8', usePointStyle: true, padding: 20 }
-                        },
+                    plugins: {
+                        legend: { display: false },
                         tooltip: {
-                            backgroundColor: 'rgba(15, 23, 42, 0.96)',
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
                             titleColor: '#fff',
                             bodyColor: '#e2e8f0',
-                            borderColor: 'rgba(129, 140, 248, 0.4)',
+                            borderColor: 'rgba(244, 114, 182, 0.4)',
                             borderWidth: 1,
                             padding: 12,
-                            cornerRadius: 10,
-                            displayColors: true
+                            cornerRadius: 10
                         }
                     },
                     scales: {
-                        x: { 
-                            grid: { color: 'rgba(255,255,255,0.03)' }, 
-                            ticks: { color: '#64748b' } 
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.04)' },
+                            ticks: { display: false }
                         },
-                        y: { 
-                            grid: { color: 'rgba(255,255,255,0.03)' }, 
-                            ticks: { color: '#64748b' }, 
-                            position: 'left' 
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.04)' },
+                            ticks: { color: '#64748b' },
+                            position: 'left'
                         },
-                        y1: { 
-                            grid: { drawOnChartArea: false }, 
-                            ticks: { color: '#64748b' }, 
-                            position: 'right' 
+                        y1: {
+                            grid: { drawOnChartArea: false },
+                            ticks: { display: false },
+                            position: 'right'
                         }
                     }
                 }
             });
         }
 
-        function updateChartData(coinKey) {
-            if (!chartInstance) return;
-            const coin = coinData[coinKey];
-            const lastIndex = chartInstance.data.datasets[0].data.length - 1;
-            chartInstance.data.datasets[0].data[lastIndex] = coin.price;
-            chartInstance.update(); // uses the pro animation settings
-            document.getElementById('chart-price').textContent = `$${coin.price.toLocaleString()}`;
+        function updateLivePrices() {
+            // Update all coin prices
+            Object.keys(coinData).forEach(key => {
+                const coin = coinData[key];
+                const change = (Math.random() * 0.6 - 0.3);
+                coin.price = parseFloat((coin.price * (1 + change / 100)).toFixed(2));
+                if (Math.random() > 0.6) {
+                    coin.change = parseFloat((coin.change + (Math.random() * 0.4 - 0.2)).toFixed(2));
+                }
+            });
+            renderCoinCards();
+
+            // Continuous chart movement (sliding window)
+            if (chartInstance && currentChartCoin) {
+                const coin = coinData[currentChartCoin];
+                
+                // Remove oldest point
+                priceHistory.shift();
+                volumeHistory.shift();
+                labels.shift();
+
+                // Add new point
+                const last = priceHistory[priceHistory.length - 1] || coin.price;
+                const newPrice = parseFloat((last * (1 + (Math.random() * 0.008 - 0.0035))).toFixed(2));
+                priceHistory.push(newPrice);
+                volumeHistory.push(Math.floor(Math.random() * 900) + 200);
+                labels.push('');
+
+                // Update chart data
+                chartInstance.data.datasets[0].data = priceHistory;
+                chartInstance.data.datasets[1].data = volumeHistory;
+                chartInstance.data.labels = labels;
+                chartInstance.update('none'); // smooth continuous feel
+
+                // Update price display
+                document.getElementById('chart-price').textContent = `$${coin.price.toLocaleString()}`;
+                document.getElementById('chart-change').textContent = `${coin.change >= 0 ? '+' : ''}${coin.change}%`;
+                document.getElementById('chart-change').className = coin.change >= 0 ? 'text-emerald-400 font-medium' : 'text-red-400 font-medium';
+            }
         }
 
-        function changeChartPeriod(hours) {
+        function changeChartPeriod() {
             if (chartInstance && currentChartCoin) initMainChart(currentChartCoin);
         }
 
-        // ==================== BOOKMARKS ====================
+        // ========== BOOKMARKS ==========
         function renderBookmarks() {
             const grid = document.getElementById('bookmarks-grid');
             const empty = document.getElementById('bookmarks-empty');
             grid.innerHTML = '';
-            
             if (bookmarkedPosts.length === 0) {
                 empty.classList.remove('hidden');
                 return;
-            } else {
-                empty.classList.add('hidden');
             }
-            
-            bookmarkedPosts.forEach((id, index) => {
+            empty.classList.add('hidden');
+            bookmarkedPosts.forEach(id => {
                 const post = posts.find(p => p.id === id);
                 if (!post) return;
-                
                 const card = document.createElement('div');
-                card.className = `premium-card group bg-white/5 border border-white/10 rounded-3xl overflow-hidden`;
-                card.innerHTML = `
-                    <div class="p-5">
-                        <div class="flex justify-between items-start">
-                            <span class="px-3 py-1 text-xs font-semibold tracking-wider bg-black/70 text-white rounded-2xl">${post.category}</span>
-                            <button onclick="removeBookmark(${id}, event)" class="text-red-400 hover:text-red-500 transition-colors">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                        <h3 class="font-semibold mt-3 leading-tight">${post.title}</h3>
-                        <p class="text-sm text-slate-400 mt-2 line-clamp-2">${post.excerpt}</p>
-                        <div class="flex items-center justify-between mt-4 text-xs">
-                            <div class="flex items-center gap-x-2">
-                                <img src="${post.avatar}" class="w-6 h-6 rounded-full">
-                                <span>${post.author}</span>
-                            </div>
-                            <span class="text-emerald-400">${post.readTime}</span>
-                        </div>
-                    </div>
-                `;
-                card.onclick = (e) => {
-                    if (!e.target.closest('button')) openModal(id);
-                };
+                card.className = 'premium-card bg-white/5 border border-white/10 rounded-3xl p-5';
+                card.innerHTML = `<h3 class="font-semibold">${post.title}</h3><p class="text-sm text-slate-400 mt-2">${post.excerpt}</p>`;
                 grid.appendChild(card);
             });
         }
 
-        function removeBookmark(id, e) {
-            e.stopImmediatePropagation();
-            bookmarkedPosts = bookmarkedPosts.filter(bid => bid !== id);
-            localStorage.setItem('bookmarkedPosts', JSON.stringify(bookmarkedPosts));
-            renderBookmarks();
-        }
-
-        function clearAllFilters() {
-            renderBlogGrid();
-        }
-
+        // ========== INIT ==========
         function initializeEverything() {
             renderCategoryFilters();
             renderBlogGrid();
-            
             document.getElementById('trending-list').innerHTML = `
-                <div class="flex justify-between items-center py-2 border-b border-white/10">
-                    <div>Hunza in Winter</div>
-                    <div class="text-xs text-emerald-400">11 min read</div>
-                </div>
-                <div class="flex justify-between items-center py-2 border-b border-white/10">
-                    <div>Crafting Emotional Stories</div>
-                    <div class="text-xs text-emerald-400">10 min read</div>
-                </div>
+                <div class="flex justify-between py-2 border-b border-white/10"><span>Hunza in Winter</span><span class="text-emerald-400 text-xs">11 min</span></div>
+                <div class="flex justify-between py-2 border-b border-white/10"><span>Crafting Emotional Stories</span><span class="text-emerald-400 text-xs">10 min</span></div>
             `;
             document.getElementById('popular-categories').innerHTML = `
-                <div class="px-4 py-2 bg-white/5 rounded-3xl text-sm hover:bg-white/10 transition-all cursor-pointer">Tech</div>
-                <div class="px-4 py-2 bg-white/5 rounded-3xl text-sm hover:bg-white/10 transition-all cursor-pointer">Travel</div>
-                <div class="px-4 py-2 bg-white/5 rounded-3xl text-sm hover:bg-white/10 transition-all cursor-pointer">Culture</div>
-                <div class="px-4 py-2 bg-white/5 rounded-3xl text-sm hover:bg-white/10 transition-all cursor-pointer">Design</div>
+                <div class="px-4 py-2 bg-white/5 rounded-3xl text-sm">Tech</div>
+                <div class="px-4 py-2 bg-white/5 rounded-3xl text-sm">Travel</div>
+                <div class="px-4 py-2 bg-white/5 rounded-3xl text-sm">Culture</div>
             `;
-            
-            const search = document.getElementById('global-search');
-            search.addEventListener('input', () => {
-                if (document.getElementById('stories').classList.contains('active')) {
-                    const term = search.value.toLowerCase();
-                    renderBlogGrid(posts.filter(p => 
-                        p.title.toLowerCase().includes(term) || 
-                        p.excerpt.toLowerCase().includes(term)
-                    ));
-                }
-            });
         }
 
         window.onload = initializeEverything;
