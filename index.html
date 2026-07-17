@@ -1,529 +1,591 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>VELORA — Maximum Edition</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- SEO -->
+  <title>VELORA – AI Tools, Productivity & Make Money Online (2026)</title>
+  <meta name="description" content="Discover the best AI tools, proven ways to make money online, and powerful productivity strategies. Updated guides for 2026.">
+  <meta name="keywords" content="AI tools, make money online, productivity, ChatGPT, side hustles, passive income, AI 2026">
+  <meta name="author" content="VELORA">
+  <meta property="og:title" content="VELORA – AI, Productivity & Making Money">
+  <meta property="og:description" content="Smart guides on AI tools, productivity systems, and real ways to make money online.">
+  <meta property="og:type" content="website">
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Inter:wght@300;400;500;600&display=swap');
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  :root {
-    --bg: #03050c;
-    --cyan: #22d3ee;
-    --pink: #f472b6;
-  }
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap');
 
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: #e2e8f0;
-    font-family: 'Inter', system-ui, sans-serif;
-    overflow-x: hidden;
-  }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0b0f19;
+      color: #e2e8f0;
+    }
 
-  .heading { font-family: 'Orbitron', sans-serif; }
+    .heading {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
 
-  .glass {
-    background: rgba(255,255,255,0.03);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.08);
-  }
+    .glass {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
 
-  /* 3D Logo */
-  .logo-3d {
-    transform-style: preserve-3d;
-    animation: floatLogo 6s ease-in-out infinite;
-    transition: all 0.6s cubic-bezier(0.23,1,0.32,1);
-  }
-  .logo-3d:hover {
-    transform: rotateY(40deg) rotateX(20deg) scale(1.18);
-    filter: drop-shadow(0 0 35px rgba(34,211,238,0.8));
-    animation: none;
-  }
-  @keyframes floatLogo {
-    0%,100% { transform: translateY(0) rotateY(0deg); }
-    50% { transform: translateY(-10px) rotateY(15deg); }
-  }
+    .card {
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+    .card img {
+      transition: transform 0.5s ease;
+    }
+    .card:hover img {
+      transform: scale(1.06);
+    }
 
-  .card-3d {
-    transform-style: preserve-3d;
-    transition: transform 0.15s ease-out;
-    will-change: transform;
-  }
+    .category-btn {
+      transition: all 0.25s ease;
+    }
+    .category-btn.active {
+      background: #6366f1;
+      color: white;
+      border-color: #6366f1;
+    }
 
-  .section {
-    display: none;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.55s cubic-bezier(0.23,1,0.32,1);
-  }
-  .section.active {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .nav-tab { position: relative; transition: 0.3s; }
-  .nav-tab.active { color: white; }
-  .nav-tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -3px; left: 0; width: 100%; height: 2px;
-    background: linear-gradient(90deg, #22d3ee, #f472b6);
-    box-shadow: 0 0 15px #22d3ee;
-  }
-
-  #three-container {
-    width: 100%;
-    height: 480px;
-    border-radius: 1.25rem;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .live-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #22d3ee;
-    box-shadow: 0 0 0 0 rgba(34,211,238,0.7);
-    animation: pulse 1.8s infinite;
-  }
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(34,211,238,0.7); }
-    70% { box-shadow: 0 0 0 12px rgba(34,211,238,0); }
-    100% { box-shadow: 0 0 0 0 rgba(34,211,238,0); }
-  }
-</style>
+    .modal {
+      animation: modalIn 0.35s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="sticky top-0 z-50 glass border-b border-white/10">
-  <div class="max-w-screen-2xl mx-auto px-6 h-16 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <div class="logo-3d w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 flex items-center justify-center">
-        <span class="text-white font-bold text-xl">V</span>
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-50 glass border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white">V</div>
+        <span class="font-semibold text-xl tracking-tight">VELORA</span>
       </div>
-      <span class="heading text-xl font-bold tracking-tight">VELORA</span>
-    </div>
 
-    <div class="hidden md:flex items-center gap-1 text-sm">
-      <button onclick="switchTab('discover')" class="nav-tab active px-4 py-2" id="tab-discover">Discover</button>
-      <button onclick="switchTab('stories')" class="nav-tab px-4 py-2" id="tab-stories">Stories</button>
-      <button onclick="switchTab('markets')" class="nav-tab px-4 py-2" id="tab-markets">Markets</button>
-      <button onclick="switchTab('bookmarks')" class="nav-tab px-4 py-2" id="tab-bookmarks">Bookmarks</button>
-      <button onclick="switchTab('explore')" class="nav-tab px-4 py-2" id="tab-explore">Explore</button>
-    </div>
-
-    <div class="w-9 h-9 rounded-full overflow-hidden ring-2 ring-white/20">
-      <img src="https://i.pravatar.cc/40?u=rose" class="w-full h-full object-cover">
-    </div>
-  </div>
-</nav>
-
-<!-- DISCOVER -->
-<div id="discover" class="section active">
-  <div class="max-w-screen-2xl mx-auto px-6 pt-20 pb-24">
-    <div class="max-w-2xl">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs mb-8">
-        <div class="live-dot"></div>
-        MAXIMUM EXPERIENCE
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="#home" class="hover:text-white transition">Home</a>
+        <a href="#articles" class="hover:text-white transition">Articles</a>
+        <a href="#categories" class="hover:text-white transition">Categories</a>
       </div>
-      <h1 class="heading text-5xl md:text-7xl font-bold leading-none mb-6">
-        Beyond<br>
-        <span class="bg-gradient-to-r from-cyan-400 to-pink-400 bg-clip-text text-transparent">ordinary</span>
+
+      <div class="text-sm text-slate-400">AI • Productivity • Money</div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="home" class="max-w-7xl mx-auto px-6 pt-16 pb-12">
+    <div class="max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-6">
+        Updated for 2026
+      </div>
+      <h1 class="heading text-5xl md:text-6xl font-bold leading-tight mb-6">
+        Smart guides on <span class="text-indigo-400">AI</span>, <span class="text-purple-400">Productivity</span> & <span class="text-pink-400">Making Money</span>
       </h1>
-      <p class="text-lg text-slate-400 mb-10">
-        Extreme 3D • Live particles • Cinematic motion
+      <p class="text-lg text-slate-400 mb-8 max-w-2xl">
+        Practical articles that help you use AI better, get more done, and build real income streams.
       </p>
-      <div class="flex gap-4">
-        <button onclick="switchTab('markets')" class="px-8 py-4 bg-white text-black font-semibold rounded-2xl hover:scale-105 transition">
-          Enter Markets
-        </button>
-        <button onclick="switchTab('stories')" class="px-8 py-4 border border-white/20 rounded-2xl hover:bg-white/5 transition">
-          View Stories
-        </button>
-      </div>
+      <a href="#articles" class="inline-flex items-center gap-2 px-7 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition">
+        Explore Articles
+        <i class="fa-solid fa-arrow-right text-sm"></i>
+      </a>
     </div>
-  </div>
-</div>
+  </section>
 
-<!-- STORIES -->
-<div id="stories" class="section">
-  <div class="max-w-screen-2xl mx-auto px-6 pt-14 pb-24">
-    <h2 class="heading text-4xl font-bold mb-2">Stories</h2>
-    <p class="text-slate-400 mb-10">Selected narratives</p>
-    <div id="blog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-  </div>
-</div>
+  <!-- Category Filters -->
+  <section id="categories" class="max-w-7xl mx-auto px-6 mb-10">
+    <div class="flex flex-wrap gap-3" id="filter-buttons">
+      <button onclick="filterArticles('all')" class="category-btn active px-5 py-2.5 rounded-full border border-white/15 text-sm font-medium">All</button>
+      <button onclick="filterArticles('AI')" class="category-btn px-5 py-2.5 rounded-full border border-white/15 text-sm font-medium">AI Tools</button>
+      <button onclick="filterArticles('Money')" class="category-btn px-5 py-2.5 rounded-full border border-white/15 text-sm font-medium">Make Money</button>
+      <button onclick="filterArticles('Productivity')" class="category-btn px-5 py-2.5 rounded-full border border-white/15 text-sm font-medium">Productivity</button>
+    </div>
+  </section>
 
-<!-- MARKETS (Three.js lives here) -->
-<div id="markets" class="section">
-  <div class="max-w-screen-2xl mx-auto px-6 pt-14 pb-24">
+  <!-- Articles Grid -->
+  <section id="articles" class="max-w-7xl mx-auto px-6 pb-20">
     <div class="flex items-end justify-between mb-8">
       <div>
-        <h2 class="heading text-4xl font-bold">Markets</h2>
-        <p class="text-slate-400">WebGL particles + bloom</p>
-      </div>
-      <div class="flex items-center gap-2 text-xs px-4 py-1.5 rounded-full bg-cyan-500/10 text-cyan-400">
-        <div class="live-dot"></div> LIVE
+        <h2 class="text-3xl font-bold">Latest Articles</h2>
+        <p class="text-slate-400 mt-1">30 carefully written guides</p>
       </div>
     </div>
 
-    <!-- Coin cards -->
-    <div id="coin-cards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10"></div>
+    <div id="articles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Articles will be injected here -->
+    </div>
+  </section>
 
-    <!-- THREE.JS CANVAS -->
-    <div class="glass rounded-3xl p-4 md:p-6">
-      <div class="flex items-center justify-between mb-4 px-2">
+  <!-- Footer -->
+  <footer class="border-t border-white/10 py-12">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between gap-8">
         <div>
-          <div class="text-sm text-slate-400">Bitcoin</div>
-          <div class="text-2xl font-bold" id="live-price">$—</div>
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-sm">V</div>
+            <span class="font-semibold text-lg">VELORA</span>
+          </div>
+          <p class="text-slate-400 text-sm max-w-xs">
+            Practical knowledge on Artificial Intelligence, Productivity systems, and real ways to make money online.
+          </p>
         </div>
-        <div class="text-right">
-          <div class="text-sm text-slate-400">24h Change</div>
-          <div id="live-change" class="font-medium">—</div>
-        </div>
-      </div>
-      <div id="three-container"></div>
-    </div>
-  </div>
-</div>
 
-<!-- BOOKMARKS -->
-<div id="bookmarks" class="section">
-  <div class="max-w-screen-2xl mx-auto px-6 pt-14 pb-24">
-    <h2 class="heading text-4xl font-bold mb-2">Bookmarks</h2>
-    <p class="text-slate-400 mb-10">Your saved pieces</p>
-    <div id="bookmarks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-  </div>
-</div>
-
-<!-- EXPLORE -->
-<div id="explore" class="section">
-  <div class="max-w-screen-2xl mx-auto px-6 pt-14 pb-24">
-    <h2 class="heading text-4xl font-bold mb-10">Explore</h2>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div class="glass rounded-3xl p-8">
-        <h3 class="text-xl font-semibold mb-4">Trending</h3>
-        <div id="trending" class="space-y-3 text-sm"></div>
-      </div>
-      <div class="glass rounded-3xl p-8">
-        <h3 class="text-xl font-semibold mb-4">Categories</h3>
-        <div class="flex flex-wrap gap-3" id="categories"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-// ===================== BASIC DATA =====================
-const posts = [
-  {id:1, title:"The Quiet Revolution of AI", category:"Tech", excerpt:"AI as creative partner.", image:"https://picsum.photos/id/1015/800/500", author:"Zain"},
-  {id:2, title:"Hunza in Winter", category:"Travel", excerpt:"When silence speaks.", image:"https://picsum.photos/id/1005/800/500", author:"Ayesha"},
-  {id:3, title:"Emotional Storytelling", category:"Culture", excerpt:"Whispers over noise.", image:"https://picsum.photos/id/29/800/500", author:"Rose"},
-  {id:4, title:"Digital Minimalism", category:"Lifestyle", excerpt:"Attention is luxury.", image:"https://picsum.photos/id/160/800/500", author:"Sara"}
-];
-
-// ===================== TAB SYSTEM =====================
-function switchTab(name) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  setTimeout(() => document.getElementById(name).classList.add('active'), 40);
-
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + name)?.classList.add('active');
-
-  if (name === 'markets') {
-    setTimeout(() => initThree(), 100);
-  }
-  if (name === 'stories') renderStories();
-  if (name === 'bookmarks') renderBookmarks();
-}
-
-// ===================== 3D TILT =====================
-function addTilt(el) {
-  el.addEventListener('mousemove', e => {
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `perspective(1000px) rotateX(${y * -12}deg) rotateY(${x * 12}deg) scale(1.03)`;
-  });
-  el.addEventListener('mouseleave', () => {
-    el.style.transition = 'transform 0.6s cubic-bezier(0.23,1,0.32,1)';
-    el.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-    setTimeout(() => el.style.transition = '', 600);
-  });
-}
-
-// ===================== STORIES =====================
-function renderStories() {
-  const grid = document.getElementById('blog-grid');
-  grid.innerHTML = '';
-  posts.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'card-3d glass rounded-2xl overflow-hidden cursor-pointer';
-    card.innerHTML = `
-      <div class="h-44 overflow-hidden">
-        <img src="${p.image}" class="w-full h-full object-cover">
-      </div>
-      <div class="p-5">
-        <div class="text-xs text-cyan-400 mb-1">${p.category}</div>
-        <h3 class="font-semibold">${p.title}</h3>
-        <p class="text-sm text-slate-400 mt-2">${p.excerpt}</p>
-      </div>
-    `;
-    addTilt(card);
-    grid.appendChild(card);
-  });
-}
-
-function renderBookmarks() {
-  document.getElementById('bookmarks-grid').innerHTML = `
-    <div class="text-slate-500 text-center py-16 col-span-full">No bookmarks yet</div>
-  `;
-}
-
-// ===================== COIN CARDS =====================
-const COINS = [
-  {id:'bitcoin', symbol:'BTC', name:'Bitcoin'},
-  {id:'ethereum', symbol:'ETH', name:'Ethereum'},
-  {id:'solana', symbol:'SOL', name:'Solana'},
-  {id:'binancecoin', symbol:'BNB', name:'BNB'},
-  {id:'ripple', symbol:'XRP', name:'XRP'}
-];
-
-let livePrices = {};
-
-async function fetchPrices() {
-  try {
-    const ids = COINS.map(c => c.id).join(',');
-    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);
-    const data = await res.json();
-    COINS.forEach(c => {
-      if (data[c.id]) {
-        livePrices[c.id] = {
-          price: data[c.id].usd,
-          change: data[c.id].usd_24h_change || 0
-        };
-      }
-    });
-    renderCoins();
-    if (livePrices.bitcoin) {
-      document.getElementById('live-price').textContent = '$' + livePrices.bitcoin.price.toLocaleString();
-      const ch = livePrices.bitcoin.change;
-      document.getElementById('live-change').textContent = (ch >= 0 ? '+' : '') + ch.toFixed(2) + '%';
-      document.getElementById('live-change').className = ch >= 0 ? 'text-emerald-400 font-medium' : 'text-red-400 font-medium';
-    }
-  } catch(e) {
-    console.log('Price fetch failed, using simulation');
-  }
-}
-
-function renderCoins() {
-  const box = document.getElementById('coin-cards');
-  box.innerHTML = '';
-  COINS.forEach(c => {
-    const p = livePrices[c.id] || {price:0, change:0};
-    const div = document.createElement('div');
-    div.className = 'card-3d glass rounded-2xl p-5 cursor-pointer';
-    div.innerHTML = `
-      <div class="flex justify-between">
-        <div>
-          <div class="font-semibold">${c.name}</div>
-          <div class="text-xs text-slate-400">${c.symbol}</div>
-        </div>
-        <div class="text-right">
-          <div class="font-bold">$${p.price ? p.price.toLocaleString(undefined,{maximumFractionDigits:0}) : '—'}</div>
-          <div class="text-sm ${p.change >= 0 ? 'text-emerald-400' : 'text-red-400'}">
-            ${p.change ? (p.change>=0?'+':'')+p.change.toFixed(2)+'%' : '—'}
+        <div class="flex gap-16 text-sm">
+          <div>
+            <div class="font-medium mb-3">Categories</div>
+            <div class="space-y-2 text-slate-400">
+              <div>AI Tools</div>
+              <div>Make Money</div>
+              <div>Productivity</div>
+            </div>
+          </div>
+          <div>
+            <div class="font-medium mb-3">Legal</div>
+            <div class="space-y-2 text-slate-400">
+              <div>Privacy Policy</div>
+              <div>Terms</div>
+              <div>Contact</div>
+            </div>
           </div>
         </div>
       </div>
-    `;
-    addTilt(div);
-    box.appendChild(div);
-  });
-}
 
-// ===================== THREE.JS MAXIMUM CHART =====================
-let scene, camera, renderer, composer, particles, line;
-let animationId = null;
-let threeInitialized = false;
+      <div class="border-t border-white/10 mt-10 pt-8 text-center text-slate-500 text-sm">
+        © 2026 VELORA. All rights reserved.
+      </div>
+    </div>
+  </footer>
 
-function initThree() {
-  if (threeInitialized) return;
-  threeInitialized = true;
+  <!-- Article Modal -->
+  <div id="article-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="modal bg-[#0f172a] w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10">
+      <div class="relative h-56 md:h-64">
+        <img id="modal-image" class="w-full h-full object-cover" alt="">
+        <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="absolute bottom-4 left-4">
+          <span id="modal-category" class="px-3 py-1 bg-indigo-600 text-xs font-medium rounded-full"></span>
+        </div>
+      </div>
+      <div class="p-8">
+        <h1 id="modal-title" class="heading text-3xl font-bold mb-4"></h1>
+        <div class="flex items-center gap-3 text-sm text-slate-400 mb-8">
+          <span id="modal-date"></span>
+          <span>•</span>
+          <span id="modal-read"></span>
+        </div>
+        <div id="modal-content" class="prose prose-invert max-w-none text-slate-300 leading-relaxed space-y-4"></div>
+      </div>
+    </div>
+  </div>
 
-  const container = document.getElementById('three-container');
-  const width = container.clientWidth;
-  const height = container.clientHeight;
+  <script>
+    // ===================== 30 ARTICLES =====================
+    const articles = [
+      // AI Tools (10)
+      {
+        id: 1,
+        title: "15 Best AI Tools You Should Use in 2026",
+        category: "AI",
+        excerpt: "A carefully tested list of the most useful AI tools for work, content, and business this year.",
+        date: "July 2026",
+        read: "9 min read",
+        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
+        content: `<p>Artificial Intelligence has moved from experiment to everyday necessity. In 2026, the right AI tools can save hours every week and open new income opportunities.</p>
+        <p>Here are 15 of the most practical AI tools worth using right now, divided by use case so you can pick what actually fits your needs.</p>
+        <p><strong>For Writing & Content:</strong> Tools that help you write faster while keeping quality high have become essential for creators and marketers.</p>
+        <p><strong>For Productivity:</strong> AI assistants that manage tasks, summarize meetings, and organize information are no longer optional for serious professionals.</p>
+        <p><strong>For Business & Money:</strong> From customer support automation to market research, AI is creating real leverage for small businesses and freelancers.</p>
+        <p>The key is not using every tool available. The key is choosing 3–5 tools that solve your biggest bottlenecks and mastering them.</p>`
+      },
+      {
+        id: 2,
+        title: "How to Make Money with ChatGPT in 2026 (Real Methods)",
+        category: "AI",
+        excerpt: "Practical ways people are actually earning with ChatGPT — not hype.",
+        date: "July 2026",
+        read: "11 min read",
+        image: "https://images.unsplash.com/photo-1676299080924-4c0b0b0b0b0b?w=800&q=80",
+        content: `<p>ChatGPT alone will not make you rich. But using it as a force multiplier can significantly increase your earning potential.</p>
+        <p>Here are proven methods that work in 2026:</p>
+        <p>1. Freelance services (writing, research, coding help, email sequences)</p>
+        <p>2. Creating and selling digital products faster</p>
+        <p>3. Building simple AI-powered tools and micro-SaaS</p>
+        <p>4. Content creation at scale (YouTube, newsletters, blogs)</p>
+        <p>The people making real money treat ChatGPT as an assistant, not a magic button. They still bring strategy, taste, and distribution.</p>`
+      },
+      {
+        id: 3,
+        title: "Best Free AI Tools for Beginners (No Credit Card)",
+        category: "AI",
+        excerpt: "Start using powerful AI without spending money.",
+        date: "June 2026",
+        read: "7 min read",
+        image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80",
+        content: `<p>You don’t need to pay to start benefiting from AI. Several high-quality tools still offer strong free tiers in 2026.</p>
+        <p>This guide covers the best free options for writing, image generation, research, and productivity so beginners can start experimenting immediately.</p>`
+      },
+      {
+        id: 4,
+        title: "AI Side Hustles That Actually Work Right Now",
+        category: "AI",
+        excerpt: "Realistic AI-based income ideas with lower competition.",
+        date: "June 2026",
+        read: "10 min read",
+        image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80",
+        content: `<p>Most “AI side hustle” advice is recycled. This article focuses on methods that still have room in 2026 and don’t require huge audiences.</p>`
+      },
+      {
+        id: 5,
+        title: "How to Write Better Prompts for ChatGPT",
+        category: "AI",
+        excerpt: "Simple framework to get much better results from AI.",
+        date: "May 2026",
+        read: "8 min read",
+        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
+        content: `<p>The quality of your output depends heavily on the quality of your input. Here’s a practical prompt framework that consistently improves results.</p>`
+      },
+      {
+        id: 6,
+        title: "Best AI Tools for Students in 2026",
+        category: "AI",
+        excerpt: "Tools that help with research, writing, and learning — the right way.",
+        date: "May 2026",
+        read: "8 min read",
+        image: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800&q=80",
+        content: `<p>AI can be a powerful learning assistant when used correctly. These tools help students research faster, understand complex topics, and improve writing.</p>`
+      },
+      {
+        id: 7,
+        title: "How Creators Are Using AI to Grow Faster",
+        category: "AI",
+        excerpt: "Real workflows used by successful creators.",
+        date: "April 2026",
+        read: "9 min read",
+        image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&q=80",
+        content: `<p>Top creators are not replacing themselves with AI. They are using it to remove bottlenecks in research, scripting, editing, and repurposing.</p>`
+      },
+      {
+        id: 8,
+        title: "AI vs Human Creativity — What’s Actually Happening",
+        category: "AI",
+        excerpt: "A clear-eyed look at the current state of AI creativity.",
+        date: "April 2026",
+        read: "10 min read",
+        image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80",
+        content: `<p>The debate is often too extreme. AI is neither going to replace all creatives nor is it just a toy. Here’s a balanced view.</p>`
+      },
+      {
+        id: 9,
+        title: "Top AI Tools for Small Businesses",
+        category: "AI",
+        excerpt: "Affordable AI tools that save time and money for small teams.",
+        date: "March 2026",
+        read: "9 min read",
+        image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&q=80",
+        content: `<p>Small businesses can gain disproportionate advantage from AI because they usually have more repetitive tasks and fewer people.</p>`
+      },
+      {
+        id: 10,
+        title: "The Future of Work with AI (Practical View)",
+        category: "AI",
+        excerpt: "What skills will matter more in an AI-powered world.",
+        date: "March 2026",
+        read: "11 min read",
+        image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&q=80",
+        content: `<p>Instead of fearing replacement, focus on the skills that become more valuable when AI handles the repetitive work.</p>`
+      },
 
-  // Scene
-  scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x03050c, 0.002);
+      // Make Money (10)
+      {
+        id: 11,
+        title: "Best Side Hustles in 2026 (Realistic Options)",
+        category: "Money",
+        excerpt: "Side hustles that still make sense this year.",
+        date: "July 2026",
+        read: "10 min read",
+        image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80",
+        content: `<p>Not every side hustle is worth your time. This list focuses on options with real demand and reasonable effort-to-reward ratio in 2026.</p>`
+      },
+      {
+        id: 12,
+        title: "How to Make Money Online with No Experience",
+        category: "Money",
+        excerpt: "Beginner-friendly paths that don’t require special skills at the start.",
+        date: "July 2026",
+        read: "9 min read",
+        image: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=800&q=80",
+        content: `<p>Starting with zero experience is possible, but you need to choose the right entry points and be willing to learn quickly.</p>`
+      },
+      {
+        id: 13,
+        title: "Passive Income Ideas That Still Work",
+        category: "Money",
+        excerpt: "Honest look at passive income in 2026.",
+        date: "June 2026",
+        read: "11 min read",
+        image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80",
+        content: `<p>True passive income is rare. Most “passive” streams still require significant upfront work. Here’s what actually has a chance.</p>`
+      },
+      {
+        id: 14,
+        title: "Freelancing for Beginners – Complete Guide",
+        category: "Money",
+        excerpt: "How to get your first clients and start earning.",
+        date: "June 2026",
+        read: "12 min read",
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80",
+        content: `<p>Freelancing remains one of the fastest ways to start earning online if you approach it correctly.</p>`
+      },
+      {
+        id: 15,
+        title: "How to Sell Digital Products in 2026",
+        category: "Money",
+        excerpt: "Step-by-step approach to creating and selling digital products.",
+        date: "May 2026",
+        read: "10 min read",
+        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+        content: `<p>Digital products offer high margins and scalability. The hard part is choosing the right product and finding distribution.</p>`
+      },
+      {
+        id: 16,
+        title: "YouTube Automation – Is It Still Worth It?",
+        category: "Money",
+        excerpt: "Current state of faceless YouTube channels.",
+        date: "May 2026",
+        read: "9 min read",
+        image: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800&q=80",
+        content: `<p>YouTube automation still works for some, but competition and costs have increased. Here’s a realistic assessment.</p>`
+      },
+      {
+        id: 17,
+        title: "Best Ways to Make Money with AI Tools",
+        category: "Money",
+        excerpt: "Combining AI skills with income generation.",
+        date: "April 2026",
+        read: "10 min read",
+        image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80",
+        content: `<p>AI lowers the barrier to offering valuable services. The opportunity is in packaging AI capabilities into clear offers.</p>`
+      },
+      {
+        id: 18,
+        title: "Dropshipping in 2026 – What Changed",
+        category: "Money",
+        excerpt: "Is dropshipping still viable?",
+        date: "April 2026",
+        read: "8 min read",
+        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
+        content: `<p>Dropshipping is harder than it was years ago, but certain niches and approaches still work.</p>`
+      },
+      {
+        id: 19,
+        title: "How to Start a Newsletter and Monetize It",
+        category: "Money",
+        excerpt: "Building an audience and turning it into income.",
+        date: "March 2026",
+        read: "11 min read",
+        image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80",
+        content: `<p>Newsletters remain one of the best ways to own your audience and create multiple income streams.</p>`
+      },
+      {
+        id: 20,
+        title: "High-Income Skills Worth Learning in 2026",
+        category: "Money",
+        excerpt: "Skills that still command good rates.",
+        date: "March 2026",
+        read: "9 min read",
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
+        content: `<p>Not all skills are equal. Focus on abilities that businesses urgently need and are willing to pay for.</p>`
+      },
 
-  // Camera
-  camera = new THREE.PerspectiveCamera(60, width/height, 0.1, 1000);
-  camera.position.set(0, 20, 90);
+      // Productivity (10)
+      {
+        id: 21,
+        title: "Best Productivity Systems in 2026",
+        category: "Productivity",
+        excerpt: "Simple systems that actually get used.",
+        date: "July 2026",
+        read: "9 min read",
+        image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&q=80",
+        content: `<p>Complicated systems usually fail. The best productivity approaches are simple enough that you can stick with them for months.</p>`
+      },
+      {
+        id: 22,
+        title: "How to Deep Work in a Distracted World",
+        category: "Productivity",
+        excerpt: "Practical methods to protect focus.",
+        date: "July 2026",
+        read: "10 min read",
+        image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80",
+        content: `<p>Deep work is becoming rarer and therefore more valuable. Here’s how to create the conditions for it.</p>`
+      },
+      {
+        id: 23,
+        title: "Morning Routines of Highly Productive People",
+        category: "Productivity",
+        excerpt: "What actually matters in the first hours of the day.",
+        date: "June 2026",
+        read: "8 min read",
+        image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80",
+        content: `<p>Most morning routine advice is aesthetic. This article focuses on elements that measurably improve the rest of the day.</p>`
+      },
+      {
+        id: 24,
+        title: "Time Blocking That Actually Works",
+        category: "Productivity",
+        excerpt: "A realistic approach to calendar control.",
+        date: "June 2026",
+        read: "7 min read",
+        image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80",
+        content: `<p>Time blocking fails when it’s too rigid. Here’s a flexible version that most people can maintain.</p>`
+      },
+      {
+        id: 25,
+        title: "How to Stop Procrastinating (Science-Based)",
+        category: "Productivity",
+        excerpt: "Understanding why we delay and what helps.",
+        date: "May 2026",
+        read: "10 min read",
+        image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
+        content: `<p>Procrastination is usually an emotion management problem, not a time management problem.</p>`
+      },
+      {
+        id: 26,
+        title: "Best Note-Taking Methods for 2026",
+        category: "Productivity",
+        excerpt: "From simple to advanced systems.",
+        date: "May 2026",
+        read: "9 min read",
+        image: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=800&q=80",
+        content: `<p>Your notes should reduce cognitive load, not increase it. Here’s how to choose the right method.</p>`
+      },
+      {
+        id: 27,
+        title: "Digital Minimalism – Practical Guide",
+        category: "Productivity",
+        excerpt: "Reducing digital noise without going extreme.",
+        date: "April 2026",
+        read: "8 min read",
+        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80",
+        content: `<p>You don’t need to delete everything. Strategic reduction of low-value digital input creates surprising clarity.</p>`
+      },
+      {
+        id: 28,
+        title: "How to Build Better Habits That Stick",
+        category: "Productivity",
+        excerpt: "Small changes that compound.",
+        date: "April 2026",
+        read: "9 min read",
+        image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&q=80",
+        content: `<p>Most habit advice focuses on motivation. Better systems focus on reducing friction and designing the environment.</p>`
+      },
+      {
+        id: 29,
+        title: "Focus Tools and Apps Worth Using",
+        category: "Productivity",
+        excerpt: "Tools that help protect attention.",
+        date: "March 2026",
+        read: "7 min read",
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
+        content: `<p>Tools can’t create focus by themselves, but the right ones can remove common distractions.</p>`
+      },
+      {
+        id: 30,
+        title: "Weekly Review System for Better Progress",
+        category: "Productivity",
+        excerpt: "A simple weekly practice that improves results.",
+        date: "March 2026",
+        read: "8 min read",
+        image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80",
+        content: `<p>Without regular review, most plans slowly drift. A short weekly review creates course correction.</p>`
+      }
+    ];
 
-  // Renderer
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setSize(width, height);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ReinhardToneMapping;
-  container.appendChild(renderer.domElement);
+    // ===================== RENDER ARTICLES =====================
+    function renderArticles(filter = 'all') {
+      const grid = document.getElementById('articles-grid');
+      grid.innerHTML = '';
 
-  // Lights
-  const ambient = new THREE.AmbientLight(0x404040, 0.6);
-  scene.add(ambient);
+      const filtered = filter === 'all' 
+        ? articles 
+        : articles.filter(a => a.category === filter);
 
-  const pointLight = new THREE.PointLight(0x22d3ee, 1.5, 200);
-  pointLight.position.set(30, 40, 40);
-  scene.add(pointLight);
-
-  // ===== PARTICLE SYSTEM =====
-  const particleCount = 1800;
-  const positions = new Float32Array(particleCount * 3);
-  const colors = new Float32Array(particleCount * 3);
-  const sizes = new Float32Array(particleCount);
-
-  const color1 = new THREE.Color(0x22d3ee);
-  const color2 = new THREE.Color(0xf472b6);
-
-  for (let i = 0; i < particleCount; i++) {
-    const i3 = i * 3;
-    positions[i3] = (Math.random() - 0.5) * 160;
-    positions[i3+1] = (Math.random() - 0.5) * 60;
-    positions[i3+2] = (Math.random() - 0.5) * 80;
-
-    const mixed = color1.clone().lerp(color2, Math.random());
-    colors[i3] = mixed.r;
-    colors[i3+1] = mixed.g;
-    colors[i3+2] = mixed.b;
-
-    sizes[i] = Math.random() * 2.5 + 0.5;
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-  const material = new THREE.PointsMaterial({
-    size: 1.8,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.85,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    sizeAttenuation: true
-  });
-
-  particles = new THREE.Points(geometry, material);
-  scene.add(particles);
-
-  // ===== GLOWING LINE =====
-  const curvePoints = [];
-  for (let i = 0; i <= 100; i++) {
-    const t = i / 100;
-    const x = (t - 0.5) * 140;
-    const y = Math.sin(t * Math.PI * 3) * 18 + Math.cos(t * Math.PI * 1.5) * 8;
-    curvePoints.push(new THREE.Vector3(x, y, 0));
-  }
-  const curve = new THREE.CatmullRomCurve3(curvePoints);
-  const tubeGeometry = new THREE.TubeGeometry(curve, 200, 0.7, 8, false);
-  const tubeMaterial = new THREE.MeshBasicMaterial({
-    color: 0xf472b6,
-    transparent: true,
-    opacity: 0.9
-  });
-  line = new THREE.Mesh(tubeGeometry, tubeMaterial);
-  scene.add(line);
-
-  // ===== BLOOM =====
-  const renderScene = new THREE.RenderPass(scene, camera);
-  const bloomPass = new THREE.UnrealBloomPass(
-    new THREE.Vector2(width, height),
-    1.8,   // strength
-    0.6,   // radius
-    0.2    // threshold
-  );
-
-  composer = new THREE.EffectComposer(renderer);
-  composer.addPass(renderScene);
-  composer.addPass(bloomPass);
-
-  // Handle resize
-  window.addEventListener('resize', () => {
-    const w = container.clientWidth;
-    const h = container.clientHeight;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-    composer.setSize(w, h);
-  });
-
-  // Start animation loop
-  animate();
-}
-
-// Continuous animation
-let time = 0;
-function animate() {
-  animationId = requestAnimationFrame(animate);
-  time += 0.008;
-
-  if (particles) {
-    const positions = particles.geometry.attributes.position.array;
-    for (let i = 0; i < positions.length; i += 3) {
-      positions[i] += Math.sin(time + i) * 0.03;
-      positions[i+1] += Math.cos(time * 0.7 + i) * 0.02;
-      // wrap around
-      if (positions[i] > 80) positions[i] = -80;
-      if (positions[i] < -80) positions[i] = 80;
+      filtered.forEach(article => {
+        const card = document.createElement('article');
+        card.className = 'card glass rounded-2xl overflow-hidden cursor-pointer border border-white/10';
+        card.innerHTML = `
+          <div class="relative h-48 overflow-hidden">
+            <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover">
+            <div class="absolute top-3 left-3">
+              <span class="px-3 py-1 text-xs font-medium rounded-full ${
+                article.category === 'AI' ? 'bg-indigo-600' : 
+                article.category === 'Money' ? 'bg-emerald-600' : 'bg-purple-600'
+              }">${article.category === 'Money' ? 'Make Money' : article.category}</span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-semibold text-lg leading-snug mb-2 line-clamp-2">${article.title}</h3>
+            <p class="text-slate-400 text-sm line-clamp-2 mb-4">${article.excerpt}</p>
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>${article.date}</span>
+              <span>${article.read}</span>
+            </div>
+          </div>
+        `;
+        card.onclick = () => openModal(article);
+        grid.appendChild(card);
+      });
     }
-    particles.geometry.attributes.position.needsUpdate = true;
-    particles.rotation.y = time * 0.05;
-  }
 
-  if (line) {
-    line.rotation.z = Math.sin(time * 0.3) * 0.05;
-  }
+    function filterArticles(category) {
+      // Update active button
+      document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      renderArticles(category);
+    }
 
-  camera.position.x = Math.sin(time * 0.2) * 8;
-  camera.lookAt(0, 0, 0);
+    function openModal(article) {
+      document.getElementById('modal-image').src = article.image;
+      document.getElementById('modal-title').textContent = article.title;
+      document.getElementById('modal-category').textContent = article.category === 'Money' ? 'Make Money' : article.category;
+      document.getElementById('modal-date').textContent = article.date;
+      document.getElementById('modal-read').textContent = article.read;
+      document.getElementById('modal-content').innerHTML = article.content;
 
-  composer.render();
-}
+      const modal = document.getElementById('article-modal');
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
 
-// ===================== INIT =====================
-function init() {
-  renderStories();
-  fetchPrices();
-  setInterval(fetchPrices, 15000);
+    function closeModal() {
+      document.getElementById('article-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
 
-  document.getElementById('trending').innerHTML = `
-    <div class="flex justify-between py-2 border-b border-white/10"><span>Hunza in Winter</span><span class="text-cyan-400">11 min</span></div>
-    <div class="flex justify-between py-2 border-b border-white/10"><span>AI Revolution</span><span class="text-cyan-400">8 min</span></div>
-  `;
-  document.getElementById('categories').innerHTML = `
-    <span class="px-4 py-2 rounded-full bg-white/5 text-sm">Tech</span>
-    <span class="px-4 py-2 rounded-full bg-white/5 text-sm">Travel</span>
-    <span class="px-4 py-2 rounded-full bg-white/5 text-sm">Culture</span>
-  `;
-}
+    // Close modal on background click
+    document.getElementById('article-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
 
-window.onload = init;
-</script>
+    // Init
+    renderArticles();
+  </script>
 </body>
 </html>
